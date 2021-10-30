@@ -33,10 +33,15 @@ def main(connect_string):
     stdin, stdout, stderr = client.exec_command(
         f"service {service_name} status"
     )
-    print(
-        "Status:",
-        stdout.read().decode('utf8').split('\n')[2].replace('Active:', '').strip()
-    )
+    output = stdout.read().decode('utf8')
+    try:
+        print(
+            "Status:",
+            output.split('\n')[2].replace('Active:', '').strip()
+        )
+    except IndexError:
+        print('Fetch status raised error')
+        print(f'Output: {output}')
 
     sftp_client = client.open_sftp()
     with open('config.txt', 'wb') as local_file:
