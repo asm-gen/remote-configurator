@@ -19,7 +19,7 @@ def main(connect_string):
             host['password'] = _d[0].split('@')[0].split(':')[1]
 
     path = ';'.join(_d[2:])[:int(_d[1])]
-    service_name = ';'.join(_d[2:])[int(_d[1]):]
+    service_name = ';'.join(_d[2:])[int(_d[1]):].strip()
 
     client = SSHClient()
     client.set_missing_host_key_policy( AutoAddPolicy() )
@@ -30,18 +30,21 @@ def main(connect_string):
         password=host['password']
     )
 
-    stdin, stdout, stderr = client.exec_command(
-        f"service {service_name} status"
-    )
-    output = stdout.read().decode('utf8')
-    try:
-        print(
-            "Status:",
-            output.split('\n')[2].replace('Active:', '').strip()
+    if service_name:
+        stdin, stdout, stderr = client.exec_command(
+            f"service {service_name} status"
         )
-    except IndexError:
-        print('Fetch status raised error')
-        print(f'Output: {output}')
+        output = stdout.read().decode('utf8')
+        try:
+            print(
+                "Status:",
+                output.split('\n')[2].replace('Active:', '').strip()
+            )
+        except IndexError:
+            print('Fetch status raised error')
+            print(f'Output: {output}')
+    else:
+        print('Service not specified')
 
     sftp_client = client.open_sftp()
     with open('config.txt', 'wb') as local_file:
@@ -58,15 +61,20 @@ def main(connect_string):
                 local_file.read()
             )
 
-    stdin, stdout, stderr = client.exec_command(
-        f"service {service_name} restart"
-    )
-    err = stderr.read().decode('utf8')
-    if err:
-        print(f'Service {service_name} not rebooted')
-        print(f'Error: {err}')
+    print('Changes was uploaded')
+
+    if service_name:
+        stdin, stdout, stderr = client.exec_command(
+            f"service {service_name} restart"
+        )
+        err = stderr.read().decode('utf8')
+        if err:
+            print(f'Service {service_name} not rebooted')
+            print(f'Error: {err}')
+        else:
+            print(f'Service {service_name} has been rebooted')
     else:
-        print(f'Service {service_name} has been rebooted')
+        print('Finished')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Remote updating program settings')
