@@ -1,6 +1,6 @@
 ## remote-configurator
 Скрипт для удаленной установки настроек программ<br>
-[Подробная видео-инструкция](https://www.youtube.com/watch?v=VU0VcgnSt-k)
+[Подробная видео-инструкция](https://youtu.be/ImPIt1x9tH8)
 
 ***
 ### Установка
