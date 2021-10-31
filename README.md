@@ -1,2 +1,18 @@
-# remote-configurator
-Script for convenient remote configuration of services
+## remote-configurator
+Скрипт для удаленной установки настроек программ
+[Подробная видео-инструкция](https://www.youtube.com/watch?v=VU0VcgnSt-k)
+
+***
+### Установка
+1. Скачать [архив](https://github.com/asm-gen/remote-configurator/releases/download/v0.1/configurator_win.zip) (ссылка актуальна только для Windows. Для остальных систем необходимо найти подходящую версию на странице доступых релизов)
+2. Распаковать скачанный архив в любую удобную папку
+3. Создать start.bat в этой папке с содержанием:
+>configurator.exe (token)<br>pause
+
+где token - выданная Вам строка, содержащая авторизационные данные
+
+### Использование
+1. Запустить start.bat, после чего в этой папке появится config.txt
+2. Отредактировать config.txt
+3. Нажать Enter в окне с запущенной программой, чтобы загрузить изменения на сервер
+4. Убедиться в успехе, проверив надпись Changes was uploaded и отсутствие ошибок после нее
